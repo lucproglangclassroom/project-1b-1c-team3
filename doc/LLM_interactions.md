@@ -1,0 +1,2 @@
+* Added new Scala 3 class `TopWords` in `src/main/scala/main/TopWords.scala`.  The class maintains a sliding window of recent words, ignores short words, tracks frequencies, and invokes a provided callback with the top cloudSize words when the window fills.  Implementation uses Scala 3 significant indentation and mutable collections for bounded space.
+* Adjusted frequency update logic to suppress Scala compiler warnings.
