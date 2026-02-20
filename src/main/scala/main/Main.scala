@@ -12,14 +12,12 @@ object Main:
            lengthAtLeast: Int = 6,
            @arg(short = 'w', name = "window-size", doc = "window size")
            windowSize: Int = 1000
-         ): Unit = {
-
+         ): Unit =
     def printWordCloud(results: Seq[(String, Int)]): Unit =
-
-    val output = results.map((word, count) => s"$word: $count").mkString(" ")
-    println(output)
-    if scala.sys.process.stdout.checkError() then
-      sys.exit(1)
+      val output = results.map((word, count) => s"$word: $count").mkString(" ")
+      println(output)
+      if scala.sys.process.stdout.checkError() then
+        sys.exit(1)
 
     val lines = scala.io.Source.stdin.getLines()
     import scala.language.unsafeNulls
@@ -30,8 +28,8 @@ object Main:
     try
       words.foreach(processor.process)
     catch
-    case _: java.io.IOException =>
-      sys.exit(0)
-  }
+      case _: java.io.IOException =>
+        sys.exit(0)
+
   def main(args: Array[String]): Unit =
     ParserForMethods(this).runOrExit(args.toIndexedSeq)

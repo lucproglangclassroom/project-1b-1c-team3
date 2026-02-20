@@ -30,27 +30,30 @@ class TopWords(
     if word.length >= minLength then
       // add to window
       queue.enqueue(word)
-  freq.updateWith(word){
-    case None    => Some(1)
-    case Some(n) => Some(n + 1)
-  }
+      freq.updateWith(word){
+        case None    => Some(1)
+        case Some(n) => Some(n + 1)
+      }
 
-  // drop older elements if oversized
-  if queue.size > windowSize then
-  val old = queue.dequeue()
-  freq.updateWith(old){
-    case Some(n) if n > 1 => Some(n - 1)
-    case _                => None // remove entry
-  }
-  () // avoid discarded-value warning
+      // drop older elements if oversized before emitting results
+      if queue.size > windowSize then
+        val old = queue.dequeue()
+        freq.updateWith(old){
+          case Some(n) if n > 1 => Some(n - 1)
+          case _                => None // remove entry
+        }
+        () // avoid discarded-value warning
 
-  // trigger callback when window exactly full
-  if queue.size == windowSize then
-  // compute top cloudSize entries by frequency descending
-  val results = freq
-    .toSeq
-    .sortBy(-_._2)
-    .take(cloudSize)
-  callback(results)
+      // trigger callback every time the window is exactly full
+      if queue.size == windowSize then
+        val results = freq
+          .toSeq
+          .sortBy(-_._2)
+          .take(cloudSize)
+        callback(results)
 
-  end TopWords
+  /** Convenience for feeding a batch of words. */
+  def processWords(words: Iterator[String]): Unit =
+    words.foreach(process)
+
+end TopWords
