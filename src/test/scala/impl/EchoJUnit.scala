@@ -52,7 +52,7 @@ class EchoJUnit:
     val ba = new ByteArrayOutputStream
     val os = new PrintStream(ba)
     System.setOut(os)
-    main.Main.main(Array.empty[String])
+    _root_.main.Main.main(Array.empty[String])
     val lines =
       import scala.language.unsafeNulls
       ba.toString.lines.toList.asScala
